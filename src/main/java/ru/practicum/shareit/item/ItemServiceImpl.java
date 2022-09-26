@@ -26,6 +26,7 @@ public class ItemServiceImpl implements ItemService {
         this.userRepository = userRepository;
     }
 
+    @Override
     public ItemDto createItem(ItemDto itemDto, Long userId) {
         User owner = getOwnerById(userId);
         Item item = ItemMapper.toItem(itemDto, owner);
@@ -34,6 +35,7 @@ public class ItemServiceImpl implements ItemService {
         return ItemMapper.toItemDto(savedItem);
     }
 
+    @Override
     public ItemDto updateItem(Long itemId, ItemDto itemDto, Long userId) {
         User owner = getOwnerById(userId);
 
@@ -58,6 +60,7 @@ public class ItemServiceImpl implements ItemService {
         return ItemMapper.toItemDto(updatedItem);
     }
 
+    @Override
     public void deleteItem(Long id) {
         if (itemRepository.delete(id)) {
             log.info("Информация о вещи id {} удалена", id);
@@ -66,6 +69,7 @@ public class ItemServiceImpl implements ItemService {
         }
     }
 
+    @Override
     public ItemDto getItem(Long id) {
         Item item = itemRepository.findById(id);
         if (item == null) {
@@ -75,12 +79,14 @@ public class ItemServiceImpl implements ItemService {
         return ItemMapper.toItemDto(item);
     }
 
+    @Override
     public List<ItemDto> getAll(Long userId) {
         List<Item> items = itemRepository.getAll(userId);
         log.info("Сформирован список вещей, принадлежащих пользователю id {} в количестве {} шт.", userId, items.size());
         return items.stream().map(ItemMapper::toItemDto).collect(Collectors.toList());
     }
 
+    @Override
     public List<ItemDto> searchItem(String text) {
         List<Item> items = itemRepository.searchItem(text);
         log.info("Поиск по строке '{}' выдал список вещей в количестве {} шт.", text, items.size());

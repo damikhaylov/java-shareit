@@ -49,4 +49,13 @@ public class ErrorHandler {
                 HttpStatus.INTERNAL_SERVER_ERROR
         );
     }
+
+    @ExceptionHandler
+    public ResponseEntity<?> handleThrowable(final Exception exception) {
+        log.warn("Internal server error: {}", exception.getMessage());
+        return new ResponseEntity<>(
+                Map.of("Internal server error", exception.getMessage()),
+                HttpStatus.INTERNAL_SERVER_ERROR
+        );
+    }
 }

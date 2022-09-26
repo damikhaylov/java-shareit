@@ -19,6 +19,7 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
     }
 
+    @Override
     public UserDto createUser(UserDto userDto) {
         User user = UserMapper.toUser(userDto);
         if (userRepository.isOccupiedEmail(user.getEmail())) {
@@ -29,6 +30,7 @@ public class UserServiceImpl implements UserService {
         return UserMapper.toUserDto(createdUser);
     }
 
+    @Override
     public UserDto updateUser(Long id, UserDto userDto) {
         User user = UserMapper.toUser(userDto);
         User updatingUser = userRepository.findById(id);
@@ -51,6 +53,7 @@ public class UserServiceImpl implements UserService {
         return UserMapper.toUserDto(updatedUser);
     }
 
+    @Override
     public void deleteUser(Long id) {
         if (userRepository.delete(id)) {
             log.info("Информация о пользователе id {} удалена", id);
@@ -59,6 +62,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
     public UserDto getUser(Long id) {
         User user = userRepository.findById(id);
         if (user == null) {
@@ -68,6 +72,7 @@ public class UserServiceImpl implements UserService {
         return UserMapper.toUserDto(user);
     }
 
+    @Override
     public List<UserDto> getAll() {
         List<User> users = userRepository.getAll();
         log.info("Сформирован список всех пользователей в количестве {} чел.", users.size());
