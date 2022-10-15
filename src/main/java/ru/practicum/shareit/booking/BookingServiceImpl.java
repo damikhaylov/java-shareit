@@ -36,7 +36,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional
-    public BookingDto createBooking(BookingDto bookingDto, Long userId) {
+    public BookingInfoDto createBooking(BookingDto bookingDto, Long userId) {
         Item item = getItemById(bookingDto.getItemId());
         if (!item.getAvailable()) {
             throw new NonAvailableItemException(String.format("Вещь с id %d недоступна", item.getId()));
@@ -51,7 +51,7 @@ public class BookingServiceImpl implements BookingService {
         booking.setStatus(BookingStatus.WAITING);
         Booking savedBooking = bookingRepository.save(booking);
         log.info("Информация о бронировании id {} сохранена", savedBooking.getId());
-        return BookingMapper.toBookingDto(savedBooking);
+        return BookingMapper.toBookingInfoDto(savedBooking);
     }
 
     @Override
