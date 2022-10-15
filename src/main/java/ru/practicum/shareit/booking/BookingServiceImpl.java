@@ -42,8 +42,8 @@ public class BookingServiceImpl implements BookingService {
             throw new NonAvailableItemException(String.format("Вещь с id %d недоступна", item.getId()));
         }
         if (item.getOwner().getId().equals(userId)) {
-            throw new BookingItemByOwnerException
-                    (String.format("Пользователь id %d не может бронировать принадлежащую ему вещь id %d",
+            throw new BookingItemByOwnerException(
+                    String.format("Пользователь id %d не может бронировать принадлежащую ему вещь id %d",
                             userId, item.getId()));
         }
         User booker = getUserById(userId);

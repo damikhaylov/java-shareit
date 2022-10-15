@@ -130,8 +130,7 @@ public class ItemServiceImpl implements ItemService {
             log.info("Поиск по пустой строке вернул пустой список вещей.");
             return new ArrayList<>();
         }
-        List<Item> items = itemRepository.
-                search(text);
+        List<Item> items = itemRepository.search(text);
         log.info("Поиск по строке '{}' выдал список вещей в количестве {} шт.", text, items.size());
         return items.stream().map(ItemMapper::toItemDto).collect(Collectors.toList());
     }
