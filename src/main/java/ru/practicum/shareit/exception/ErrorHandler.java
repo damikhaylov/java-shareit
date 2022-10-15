@@ -51,6 +51,51 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
+    public ResponseEntity<?> handleValidationException(final UnsupportedStatusException exception) {
+        log.warn("Ошибка статуса бронирования: {}", exception.getMessage());
+        return new ResponseEntity<>(
+                Map.of("error", exception.getMessage()),
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<?> handleValidationException(final NonAvailableItemException exception) {
+        log.warn("Ошибка — вещь недоступна для бронирования: {}", exception.getMessage());
+        return new ResponseEntity<>(
+                Map.of("Ошибка (вещь недоступна)", exception.getMessage()),
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<?> handleValidationException(final ApprovedStatusDeniedToChangeException exception) {
+        log.warn("Ошибка — невозможно изменить уже одобренный статус бронирования: {}", exception.getMessage());
+        return new ResponseEntity<>(
+                Map.of("Ошибка (невозможно изменить уже одобренный статус бронирования)", exception.getMessage()),
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<?> handleValidationException(final BookingItemByOwnerException exception) {
+        log.warn("Ошибка — бронирование вещи её хозяином: {}", exception.getMessage());
+        return new ResponseEntity<>(
+                Map.of("Ошибка (бронирование вещи её хозяином)", exception.getMessage()),
+                HttpStatus.NOT_FOUND
+        );
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<?> handleValidationException(final CommentWithoutBookingException exception) {
+        log.warn("Ошибка — невозможно оставить комментарий, если не было бронирования: {}", exception.getMessage());
+        return new ResponseEntity<>(
+                Map.of("Ошибка (невозможно оставить комментарий, если не было бронирования)", exception.getMessage()),
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler
     public ResponseEntity<?> handleThrowable(final Exception exception) {
         log.warn("Internal server error: {}", exception.getMessage());
         return new ResponseEntity<>(
