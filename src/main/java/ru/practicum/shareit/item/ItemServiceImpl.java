@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-//@Transactional(readOnly = true)
+@Transactional(readOnly = true)
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
@@ -100,6 +100,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public void deleteItem(Long id) {
+        log.info("Выполняется удаление вещи id {}", id);
         itemRepository.deleteById(id);
     }
 
