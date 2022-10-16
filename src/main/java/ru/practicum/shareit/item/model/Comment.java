@@ -1,7 +1,6 @@
-package ru.practicum.shareit.booking;
+package ru.practicum.shareit.item.model;
 
 import lombok.*;
-import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 
 import javax.persistence.*;
@@ -14,19 +13,16 @@ import java.time.LocalDateTime;
 @ToString
 @EqualsAndHashCode
 @Entity
-@Table(name = "bookings")
-public class Booking {
+@Table(name = "comments")
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @Column(name = "start_date")
-    LocalDateTime start;
-    @Column(name = "end_date")
-    LocalDateTime end;
+    @Column(length = 10000)
+    String text;
     @ManyToOne
     Item item;
     @ManyToOne
-    User booker;
-    @Enumerated(EnumType.STRING)
-    BookingStatus status;
+    User author;
+    LocalDateTime created;
 }
