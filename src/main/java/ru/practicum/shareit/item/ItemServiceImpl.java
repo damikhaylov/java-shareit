@@ -16,6 +16,8 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemInfoDto;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.ItemRequest;
+import ru.practicum.shareit.request.ItemRequestRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
 
@@ -34,22 +36,30 @@ public class ItemServiceImpl implements ItemService {
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
 
+    private final ItemRequestRepository itemRequestRepository;
+
     @Autowired
     public ItemServiceImpl(ItemRepository itemRepository,
                            UserRepository userRepository,
                            BookingRepository bookingRepository,
-                           CommentRepository commentRepository) {
+                           CommentRepository commentRepository,
+                           ItemRequestRepository itemRequestRepository
+    ) {
         this.itemRepository = itemRepository;
         this.userRepository = userRepository;
         this.bookingRepository = bookingRepository;
         this.commentRepository = commentRepository;
+        this.itemRequestRepository = itemRequestRepository;
     }
 
     @Override
     @Transactional
     public ItemDto createItem(ItemDto itemDto, Long userId) {
         User owner = getOwnerById(userId);
-        Item item = ItemMapper.toItem(itemDto, owner);
+        ItemRequest itemRequest = (itemDto.getRequestId() != null)
+                ? itemRequestRepository.findById(itemDto.getRequestId()).orElse(null)
+                : null;
+        Item item = ItemMapper.toItem(itemDto, owner, itemRequest);
         Item savedItem = itemRepository.save(item);
         log.info("Информация о вещи id {} сохранена", savedItem.getId());
         return ItemMapper.toItemDto(savedItem);
@@ -77,7 +87,10 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     public ItemDto updateItem(Long itemId, ItemDto itemDto, Long userId) {
         User owner = getOwnerById(userId);
-        Item item = ItemMapper.toItem(itemDto, owner);
+        ItemRequest itemRequest = (itemDto.getRequestId() != null)
+                ? itemRequestRepository.findById(itemDto.getRequestId()).orElse(null)
+                : null;
+        Item item = ItemMapper.toItem(itemDto, owner, itemRequest);
 
         Item updatingItem = itemRepository.findById(itemId).orElseThrow(
                 () -> new NonExistentIdException("Не найдена вещь с id " + itemId));
@@ -90,9 +103,11 @@ public class ItemServiceImpl implements ItemService {
                 ? item.getDescription() : updatingItem.getDescription();
         Boolean updatedAvailable = (item.getAvailable() != null)
                 ? item.getAvailable() : updatingItem.getAvailable();
+        ItemRequest updatedItemRequest = (item.getRequest() != null)
+                ? item.getRequest() : updatingItem.getRequest();
 
         Item updatedItem = itemRepository.save(new Item(itemId, updatedName, updatedDescription,
-                updatedAvailable, owner, null));
+                updatedAvailable, owner, updatedItemRequest));
         log.info("Информация о вещи id {} обновлена", updatedItem.getId());
         return ItemMapper.toItemDto(updatedItem);
     }
