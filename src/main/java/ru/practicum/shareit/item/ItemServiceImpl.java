@@ -2,6 +2,8 @@ package ru.practicum.shareit.item;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.Booking;
@@ -132,22 +134,24 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemInfoDto> getAll(Long userId) {
+    public List<ItemInfoDto> getAll(Long userId, PageRequest pageRequest) {
         User owner = getOwnerById(userId);
-        List<Item> items = itemRepository.findByOwnerOrderByIdAsc(owner);
-        log.info("Сформирован список вещей, принадлежащих пользователю id {} в количестве {} шт.",
-                userId, items.size());
+        Page<Item> items = itemRepository.findByOwnerOrderByIdAsc(owner, pageRequest);
+        log.info("Сформирована постраничная выдача из списка всех вещей, " +
+                        "принадлежащих пользователю id {} в количестве {} шт.",
+                userId, items.getSize());
         return items.stream().map(this::getItemInfoDtoWithBookings).collect(Collectors.toList());
     }
 
     @Override
-    public List<ItemDto> searchItem(String text) {
+    public List<ItemDto> searchItem(String text, PageRequest pageRequest) {
         if (text.isBlank()) {
             log.info("Поиск по пустой строке вернул пустой список вещей.");
             return new ArrayList<>();
         }
-        List<Item> items = itemRepository.search(text);
-        log.info("Поиск по строке '{}' выдал список вещей в количестве {} шт.", text, items.size());
+        Page<Item> items = itemRepository.search(text, pageRequest);
+        log.info("Сформирована постраничная выдача из результатов поиска по строке '{}' в количестве {} шт.",
+                text, items.getSize());
         return items.stream().map(ItemMapper::toItemDto).collect(Collectors.toList());
     }
 

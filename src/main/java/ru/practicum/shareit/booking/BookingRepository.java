@@ -1,5 +1,7 @@
 package ru.practicum.shareit.booking;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
@@ -8,29 +10,31 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
-    List<Booking> findByBookerOrderByStartDesc(User booker);
+    Page<Booking> findByBookerOrderByStartDesc(User booker, Pageable pageable);
 
-    List<Booking> findByBookerAndStatusOrderByStartDesc(User booker, BookingStatus status);
+    Page<Booking> findByBookerAndStatusOrderByStartDesc(User booker, BookingStatus status, Pageable pageable);
 
-    List<Booking> findByBookerAndStartBeforeAndEndAfterOrderByStartDesc(User booker,
+    Page<Booking> findByBookerAndStartBeforeAndEndAfterOrderByStartDesc(User booker,
                                                                         LocalDateTime start,
-                                                                        LocalDateTime end);
+                                                                        LocalDateTime end,
+                                                                        Pageable pageable);
 
-    List<Booking> findByBookerAndEndBeforeOrderByStartDesc(User booker, LocalDateTime end);
+    Page<Booking> findByBookerAndEndBeforeOrderByStartDesc(User booker, LocalDateTime end, Pageable pageable);
 
-    List<Booking> findByBookerAndStartAfterOrderByStartDesc(User booker, LocalDateTime start);
+    Page<Booking> findByBookerAndStartAfterOrderByStartDesc(User booker, LocalDateTime start, Pageable pageable);
 
-    List<Booking> findByItemInOrderByStartDesc(List<Item> items);
+    Page<Booking> findByItemInOrderByStartDesc(List<Item> items, Pageable pageable);
 
-    List<Booking> findByItemInAndStatusOrderByStartDesc(List<Item> items, BookingStatus status);
+    Page<Booking> findByItemInAndStatusOrderByStartDesc(List<Item> items, BookingStatus status, Pageable pageable);
 
-    List<Booking> findByItemInAndStartBeforeAndEndAfterOrderByStartDesc(List<Item> items,
+    Page<Booking> findByItemInAndStartBeforeAndEndAfterOrderByStartDesc(List<Item> items,
                                                                         LocalDateTime start,
-                                                                        LocalDateTime end);
+                                                                        LocalDateTime end,
+                                                                        Pageable pageable);
 
-    List<Booking> findByItemInAndEndBeforeOrderByStartDesc(List<Item> items, LocalDateTime end);
+    Page<Booking> findByItemInAndEndBeforeOrderByStartDesc(List<Item> items, LocalDateTime end, Pageable pageable);
 
-    List<Booking> findByItemInAndStartAfterOrderByStartDesc(List<Item> items, LocalDateTime start);
+    Page<Booking> findByItemInAndStartAfterOrderByStartDesc(List<Item> items, LocalDateTime start, Pageable pageable);
 
     Booking findFirstByItemAndStartBeforeOrderByStartDesc(Item item, LocalDateTime moment);
 

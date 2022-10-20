@@ -1,13 +1,17 @@
 package ru.practicum.shareit.booking;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.Create;
+import ru.practicum.shareit.MyPageRequest;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingInfoDto;
 import ru.practicum.shareit.exception.UnsupportedStatusException;
 
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController
@@ -23,7 +27,7 @@ public class BookingController {
 
     @PostMapping
     BookingInfoDto createBooking(@RequestHeader("X-Sharer-User-Id") Long userId,
-                             @Validated({Create.class}) @RequestBody BookingDto bookingDto) {
+                                 @Validated({Create.class}) @RequestBody BookingDto bookingDto) {
         return bookingService.createBooking(bookingDto, userId);
     }
 
@@ -40,10 +44,13 @@ public class BookingController {
 
     @GetMapping
     public List<BookingInfoDto> getBookings(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                            @RequestParam(name = "state", defaultValue = "ALL") String stateParam) {
+                                            @RequestParam(name = "state", defaultValue = "ALL") String stateParam,
+                                            @PositiveOrZero @RequestParam(name = "from", defaultValue = "0")
+                                            Integer from,
+                                            @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
         try {
             BookingState state = BookingState.valueOf(stateParam);
-            return bookingService.getBookings(userId, state);
+            return bookingService.getBookings(userId, state, new MyPageRequest(from, size, Sort.unsorted()));
         } catch (IllegalArgumentException e) {
             throw new UnsupportedStatusException("Unknown state: " + stateParam);
         }
@@ -51,10 +58,15 @@ public class BookingController {
 
     @GetMapping("/owner")
     public List<BookingInfoDto> getBookingsForOwner(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                                    @RequestParam(name = "state", defaultValue = "ALL") String stateParam) {
+                                                    @RequestParam(name = "state", defaultValue = "ALL")
+                                                    String stateParam,
+                                                    @PositiveOrZero @RequestParam(name = "from", defaultValue = "0")
+                                                    Integer from,
+                                                    @Positive @RequestParam(name = "size", defaultValue = "10")
+                                                    Integer size) {
         try {
             BookingState state = BookingState.valueOf(stateParam);
-            return bookingService.getBookingsForOwner(userId, state);
+            return bookingService.getBookingsForOwner(userId, state, new MyPageRequest(from, size, Sort.unsorted()));
         } catch (IllegalArgumentException e) {
             throw new UnsupportedStatusException("Unknown state: " + stateParam);
         }
