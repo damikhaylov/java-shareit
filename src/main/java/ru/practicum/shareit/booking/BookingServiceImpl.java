@@ -66,11 +66,12 @@ public class BookingServiceImpl implements BookingService {
                 () -> new NonExistentIdException("Не найдена запись о бронировании с id " + bookingId));
         if (booking.getStatus().equals(BookingStatus.APPROVED)) {
             throw new ApprovedStatusDeniedToChangeException(String.format(
-                    "Пользователь id %d не является владельцем вещи и не может изменить её статус бронирования",
-                    userId));
+                    "Бронирование id %d уже подтверждено", bookingId));
         }
         if (!userId.equals(booking.getItem().getOwner().getId())) {
-            throw new NonExistentIdException(String.format("Бронирование id %d уже подтверждено", bookingId));
+            throw new NonExistentIdException(String.format(
+                    "Пользователь id %d не является владельцем вещи и не может изменить её статус бронирования",
+                    userId));
         }
         booking.setStatus(isApproved ? BookingStatus.APPROVED : BookingStatus.REJECTED);
         Booking savedBooking = bookingRepository.save(booking);
