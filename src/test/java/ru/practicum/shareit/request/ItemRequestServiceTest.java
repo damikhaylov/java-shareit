@@ -79,7 +79,7 @@ public class ItemRequestServiceTest {
         Exception exception = assertThrows(ValidationException.class,
                 () -> itemRequestService.createItemRequest(new ItemRequestDto(defaultDescription), null));
 
-        assertTrue(exception.getMessage().contains("Не передан id пользователя, бронирующего вещь"));
+        assertTrue(exception.getMessage().contains("Не передан id пользователя, запрашивающего вещь"));
     }
 
     @Test

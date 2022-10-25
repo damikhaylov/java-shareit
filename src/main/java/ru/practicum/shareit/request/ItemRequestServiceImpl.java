@@ -73,7 +73,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     private User getUserById(Long userId) {
         if (userId == null) {
-            throw new ValidationException("Не передан id пользователя, бронирующего вещь");
+            throw new ValidationException("Не передан id пользователя, запрашивающего вещь");
         }
         return userRepository.findById(userId).orElseThrow(
                 () -> new NonExistentIdException("Не найден пользователь с id " + userId));
