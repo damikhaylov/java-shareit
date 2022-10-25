@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -86,7 +87,8 @@ public class ItemControllerTest {
                 .andExpect(jsonPath("$.itemId", is(commentInfoDto.getItemId()), Long.class))
                 .andExpect(jsonPath("$.authorId", is(commentInfoDto.getAuthorId()), Long.class))
                 .andExpect(jsonPath("$.authorName", is(commentInfoDto.getAuthorName())))
-                .andExpect(jsonPath("$.created", is(commentInfoDto.getCreated().toString())));
+                .andExpect(jsonPath("$.created",
+                        Matchers.containsString(commentInfoDto.getCreated().toString())));
 
         verify(itemService, times(1)).createComment(defaultItemId, commentDto, defaultUserId);
     }
