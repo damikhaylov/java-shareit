@@ -150,6 +150,19 @@ class ShareItTests {
     }
 
     @Test
+    void createBookingForItemWithNullIdTest() throws Exception {
+        BookingDto bookingDto = new BookingDto(null, newBookingStart, newBookingEnd, null,
+                null, null);
+        mvc.perform(MockMvcRequestBuilders.post("/bookings")
+                        .header("X-Sharer-User-Id", bookerUser.getId())
+                        .content(mapper.writeValueAsString(bookingDto))
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInternalServerError());
+    }
+
+    @Test
     void createBookingForOwnerAsBookerTest() throws Exception {
         BookingDto bookingDto = new BookingDto(null, newBookingStart, newBookingEnd, availableItem.getId(),
                 null, null);
