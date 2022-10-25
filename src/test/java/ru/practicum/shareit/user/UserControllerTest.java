@@ -50,6 +50,18 @@ public class UserControllerTest {
     }
 
     @Test
+    void createUserTestWithBlancParameters() throws Exception {
+        when(userService.createUser(any())).thenReturn(userDto);
+
+        mvc.perform(MockMvcRequestBuilders.post("/users")
+                        .content(mapper.writeValueAsString(new UserDto(null, "", "")))
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void updateUserTest() throws Exception {
         when(userService.updateUser(anyLong(), any())).thenReturn(userDto);
 
