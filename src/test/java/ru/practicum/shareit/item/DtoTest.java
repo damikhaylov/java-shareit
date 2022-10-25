@@ -6,7 +6,6 @@ import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.json.JsonContent;
 import ru.practicum.shareit.booking.BookingStatus;
-import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.CommentInfoDto;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -47,10 +46,10 @@ public class DtoTest {
         LocalDateTime lastBookingEnd = LocalDateTime.of(2000, 2, 1, 12, 0);
         LocalDateTime nextBookingStart = LocalDateTime.of(2050, 1, 1, 12, 0);
         LocalDateTime nextBookingEnd = LocalDateTime.of(2050, 2, 1, 12, 0);
-        BookingDto lastBookingDto = new BookingDto(1L, lastBookingStart, lastBookingEnd, 1L, 1L,
-                BookingStatus.APPROVED);
-        BookingDto nextBookingDto = new BookingDto(2L, nextBookingStart, nextBookingEnd, 1L, 2L,
-                BookingStatus.APPROVED);
+        ItemInfoDto.BookingDto lastBookingDto = new ItemInfoDto.BookingDto(1L, lastBookingStart, lastBookingEnd,
+                1L, 1L, BookingStatus.APPROVED);
+        ItemInfoDto.BookingDto nextBookingDto = new ItemInfoDto.BookingDto(2L, nextBookingStart, nextBookingEnd,
+                1L, 2L, BookingStatus.APPROVED);
         ItemInfoDto itemInfoDto = new ItemInfoDto(1L, "Item", "Item description", true,
                 lastBookingDto, nextBookingDto, Collections.emptyList());
 

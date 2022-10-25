@@ -7,7 +7,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.Booking;
-import ru.practicum.shareit.booking.BookingMapper;
 import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.exception.CommentWithoutBookingException;
 import ru.practicum.shareit.exception.NonExistentIdException;
@@ -169,7 +168,6 @@ public class ItemServiceImpl implements ItemService {
         Booking nextBooking =
                 bookingRepository.findFirstByItemAndStartAfterOrderByStartAsc(item, LocalDateTime.now());
         List<Comment> comments = commentRepository.findByItemOrderByCreatedDesc(item);
-        return ItemMapper.toItemInfoDto(item,
-                BookingMapper.toBookingDto(lastBooking), BookingMapper.toBookingDto(nextBooking), comments);
+        return ItemMapper.toItemInfoDto(item, lastBooking, nextBooking, comments);
     }
 }

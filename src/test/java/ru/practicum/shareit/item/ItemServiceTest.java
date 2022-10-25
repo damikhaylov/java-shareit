@@ -11,7 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import ru.practicum.shareit.MyPageRequest;
 import ru.practicum.shareit.booking.Booking;
-import ru.practicum.shareit.booking.BookingMapper;
 import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.booking.BookingStatus;
 import ru.practicum.shareit.exception.CommentWithoutBookingException;
@@ -81,10 +80,7 @@ public class ItemServiceTest {
                 LocalDateTime.of(2050, 1, 1, 12, 0),
                 LocalDateTime.of(2050, 2, 1, 12, 0),
                 item, user, BookingStatus.APPROVED);
-        itemInfoDto = ItemMapper.toItemInfoDto(item,
-                BookingMapper.toBookingDto(lastBooking),
-                BookingMapper.toBookingDto(nextBooking),
-                Collections.emptyList());
+        itemInfoDto = ItemMapper.toItemInfoDto(item, lastBooking, nextBooking, Collections.emptyList());
     }
 
     @Test

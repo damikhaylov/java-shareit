@@ -1,6 +1,6 @@
 package ru.practicum.shareit.item;
 
-import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemInfoDto;
 import ru.practicum.shareit.item.model.Comment;
@@ -33,16 +33,42 @@ public class ItemMapper {
         );
     }
 
-    public static ItemInfoDto toItemInfoDto(Item item, BookingDto lastBooking, BookingDto nextBooking,
+    public static ItemInfoDto toItemInfoDto(Item item, Booking lastBooking, Booking nextBooking,
                                             List<Comment> comments) {
         return new ItemInfoDto(
                 item.getId(),
                 item.getName(),
                 item.getDescription(),
                 item.getAvailable(),
-                lastBooking,
-                nextBooking,
-                comments.stream().map(CommentMapper::toCommentInfoDto).collect(Collectors.toList())
+                toBookingDto(lastBooking),
+                toBookingDto(nextBooking),
+                comments.stream().map(ItemMapper::toCommentInfoDto).collect(Collectors.toList())
+        );
+    }
+
+    private static ItemInfoDto.BookingDto toBookingDto(Booking booking) {
+        if (booking != null) {
+            return new ItemInfoDto.BookingDto(
+                    booking.getId(),
+                    booking.getStart(),
+                    booking.getEnd(),
+                    booking.getItem().getId(),
+                    booking.getBooker().getId(),
+                    booking.getStatus()
+            );
+        } else {
+            return null;
+        }
+    }
+
+    private static ItemInfoDto.CommentInfoDto toCommentInfoDto(Comment comment) {
+        return new ItemInfoDto.CommentInfoDto(
+                comment.getId(),
+                comment.getText(),
+                comment.getItem().getId(),
+                comment.getAuthor().getId(),
+                comment.getAuthor().getName(),
+                comment.getCreated()
         );
     }
 }
