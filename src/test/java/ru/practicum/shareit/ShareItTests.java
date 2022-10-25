@@ -75,7 +75,8 @@ class ShareItTests {
                 LocalDateTime.of(2022, 1, 1, 12, 0, 0));
         request = itemRequestRepository.save(request);
 
-        availableItem = new Item(null, "Item1", "Item1 description", true, ownerUser, request);
+        availableItem = new Item(null, "Item1", "Item1 description", true, ownerUser,
+                request);
         unavailableItem = new Item(null, "Item2", "Item2 description", false, ownerUser,
                 null);
         availableItem = itemRepository.save(availableItem);
