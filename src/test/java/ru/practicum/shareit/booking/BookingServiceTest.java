@@ -182,17 +182,6 @@ public class BookingServiceTest {
     }
 
     @Test
-    void operationNullApprovingParameterTest() {
-        when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(booking));
-
-        Exception exception = assertThrows(ValidationException.class,
-                () -> bookingService.approveBooking(booking.getItem().getOwner().getId(), booking.getId(),
-                        null));
-
-        assertTrue(exception.getMessage().contains("Неверный параметр подтверждения или отмены бронирования"));
-    }
-
-    @Test
     void operationApprovedStatusDeniedToChangeExceptionTest() {
         booking.setStatus(BookingStatus.APPROVED);
         when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(booking));

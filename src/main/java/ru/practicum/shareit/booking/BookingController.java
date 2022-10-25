@@ -10,6 +10,7 @@ import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingInfoDto;
 import ru.practicum.shareit.exception.UnsupportedStatusException;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
@@ -33,7 +34,7 @@ public class BookingController {
 
     @PatchMapping("/{bookingId}")
     public BookingInfoDto updateBooking(@RequestHeader("X-Sharer-User-Id") Long userId, @PathVariable Long bookingId,
-                                     @RequestParam Boolean approved) {
+                                        @Validated @NotNull @RequestParam Boolean approved) {
         return bookingService.approveBooking(userId, bookingId, approved);
     }
 

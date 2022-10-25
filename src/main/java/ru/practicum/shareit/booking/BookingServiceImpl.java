@@ -59,9 +59,6 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional
     public BookingInfoDto approveBooking(Long userId, Long bookingId, Boolean isApproved) {
-        if (isApproved == null) {
-            throw new ValidationException("Неверный параметр подтверждения или отмены бронирования");
-        }
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(
                 () -> new NonExistentIdException("Не найдена запись о бронировании с id " + bookingId));
         if (booking.getStatus().equals(BookingStatus.APPROVED)) {
