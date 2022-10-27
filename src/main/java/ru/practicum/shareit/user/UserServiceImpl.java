@@ -2,6 +2,8 @@ package ru.practicum.shareit.user;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.NonExistentIdException;
@@ -64,9 +66,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getAll() {
-        List<User> users = userRepository.findAll();
-        log.info("Сформирован список всех пользователей в количестве {} чел.", users.size());
+    public List<UserDto> getAll(PageRequest pageRequest) {
+        Page<User> users = userRepository.findAll(pageRequest);
+        log.info("Сформирована постраничная выдача из перечня всех пользователей в количестве {} чел.",
+                users.getSize());
         return users.stream().map(UserMapper::toUserDto).collect(Collectors.toList());
     }
 }

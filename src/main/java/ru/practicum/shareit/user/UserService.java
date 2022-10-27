@@ -1,5 +1,7 @@
 package ru.practicum.shareit.user;
 
+import org.springframework.data.domain.PageRequest;
+
 import java.util.List;
 
 public interface UserService {
@@ -11,5 +13,5 @@ public interface UserService {
 
     UserDto getUser(Long id);
 
-    List<UserDto> getAll();
+    List<UserDto> getAll(PageRequest pageRequest);
 }
